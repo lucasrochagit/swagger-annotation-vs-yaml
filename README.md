@@ -31,15 +31,15 @@ ponto de vista em relação a elas (prós e contras).
 
 ## 2. Construindo a API
 
-## 2.1 O que utilizar
+### 2.1 O que irei utilizar
 
-Para o desenvolvimento da API, vou utilizar:
+Para o desenvolvimento da API, irei utilizar:
 
 1. IDE Webstorm
 2. NodeJS + NestJS para desenvolvimento da API
 3. SQLite como banco de dados
 
-## 2.2 Iniciando a API
+### 2.2 Iniciando a API
 
 Para criar o projeto, basta utilizar o comando `nest new nest-api-with-swagger`. Será criado um projeto com a seguinte
 estrutura:
@@ -60,7 +60,7 @@ Após isso, irei atualizar as dependências da aplicação para as versões mais
 Clique [aqui](https://nodejs.dev/learn/update-all-the-nodejs-dependencies-to-their-latest-version) para mais informações
 sobre esse procedimento.
 
-### 2.2.1 Estrutura do projeto
+#### 2.2.1 Estrutura do projeto
 
 Após criar o projeto, irei remover os arquivos de teste (diretório `test` e `app.controller.spec.ts`) e remover o
 diretório `.git` que é gerado automaticamente pelo `nest`. Além disso, irei adicionar os arquivos gerados
@@ -115,7 +115,7 @@ src/
         mapper/
         model/
         service/
-    ...
+...
 ```
 
 Onde:
@@ -151,17 +151,17 @@ por `arquivo`, utilizando um arquivo de extensão `yaml`. Logo, as APIs estão e
 swagger-annotation-vs-yaml/
     annotation/
         src/
-        ...
+            ...
     file/
         src/
-        ...
+            ...
 ```
 
 ### 3.1 Adicionando o Swagger via Annotation
 
 Para adicionar o swagger via `annotation` na API, é necessário instalar as dependências `@nestjs/swagger`
 e `swagger-ui-express`. Após isso, irei iniciar as configurações do Swagger. Para isso, irei criar um arquivo
-swagger.config.ts em `src/ui/swagger`. O arquivo terá a seguinte configuração:
+`swagger.config.ts` em `src/ui/swagger`. O arquivo terá a seguinte configuração:
 
 ```ts
 import { DocumentBuilder } from '@nestjs/swagger';
@@ -344,7 +344,7 @@ export class UserController {
     @Get()
     @HttpCode(HttpStatus.OK)
     @ApiProduces('application/json')
-    @ApiOkResponse({ description: 'Ok', type: UserDTO })
+    @ApiOkResponse({ description: 'Ok', type: [UserDTO] })
     @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
     @ApiInternalServerErrorResponse({ description: 'Internal Server Error' })
@@ -356,7 +356,7 @@ export class UserController {
     @Get('/:user_id')
     @HttpCode(HttpStatus.OK)
     @ApiProduces('application/json')
-    @ApiOkResponse({ description: 'Ok', type: [UserDTO], isArray: true })
+    @ApiOkResponse({ description: 'Ok', type: UserDTO, isArray: true })
     @ApiNotFoundResponse({ description: 'Not Found' })
     @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
@@ -396,9 +396,54 @@ export class UserController {
 Adicione também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
 do projeto não apareça na documentação final do Swagger.
 
-Ao subir novamente a aplicação e acessar o endereço 'http://localhost:3000' resultado da documentação até então é:
+Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
 
 ![header_swagger_api_doc_with_annotation](images/full_swagger_api_doc_with_annotation.png)
+
+### 3.2 Adicionando o Swagger via YAML
+
+Para adicionar o swagger via `arquivo` na API, é necessário instalar as dependências `@nestjs/swagger`
+, `swagger-ui-express` e `yamljs`. Após isso, irei iniciar as configurações do Swagger. Para escrever a documentação
+Swagger em um arquivo .yaml, irei utilizar a ferramenta [Swagger Editor](https://editor.swagger.io/) para escrever a
+documentação (semelhante à documentação gerada com anotação) e, em seguida, irei exportar a documentação no formato
+`yaml` e adicionar no diretório `src/ui/swagger` com o nome `swagger.yaml`.
+
+Em seguida, no arquivo `main.ts`, irei adicionar o Swagger na aplicação da seguinte forma:
+
+```ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './ui/module/app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule } from '@nestjs/swagger';
+import * as yaml from 'yamljs';
+
+async function bootstrap() {
+  const { PORT } = process.env;
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe()); // validate submitted data
+  const document = yaml.load('./src/ui/swagger/swagger.yaml'); // read swagger documentation from file
+  SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
+  await app.listen(PORT);
+}
+
+bootstrap();
+```
+
+Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
+
+![header_swagger_api_doc_with_annotation](images/full_swagger_api_doc_with_file.png)
+
+
+###  4. Afinal, qual é o melhor alternativa?
+
+Do meu ponto de vista, existem alguns fatores que devem ser levados em consideração antes de escolher uma alternativa.
+São eles:
+
+1. Custo para implementação. 
+2. Verbosidade.
+3. Legibilidade.
+4. Impacto no desempenho da aplicação.
+5. Manutenibilidade.
 
 ## Referências
 

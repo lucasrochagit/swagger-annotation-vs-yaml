@@ -10,7 +10,7 @@ export class SwaggerConfig {
       .setVersion('v1')
       .addServer('htp://localhost:3000', 'Local Http Instance')
       .setTermsOfService(
-        'https://github.com/lucasrochagit/nest-base-api/blob/main/LICENSE',
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
       )
       .setContact(
         'Lucas Cosmo Rocha',
@@ -19,7 +19,7 @@ export class SwaggerConfig {
       )
       .setLicense(
         'Apache 2.0',
-        'https://github.com/lucasrochagit/spring-base-api/blob/main/LICENSE',
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
       );
   }
 }
