@@ -7,7 +7,6 @@ import {
   Matches,
 } from 'class-validator';
 
-
 export class UserDTO {
   @IsOptional()
   id: number;
