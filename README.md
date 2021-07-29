@@ -46,14 +46,14 @@ estrutura:
 
 ```html
 src/
-    app.controller.spec.ts
-    app.controller.ts
-    app.module.ts
-    app.service.ts
-    main.ts
+app.controller.spec.ts
+app.controller.ts
+app.module.ts
+app.service.ts
+main.ts
 test/
-    app.e2e-spec.ts
-    jest-e2e.json
+app.e2e-spec.ts
+jest-e2e.json
 ```
 
 Após isso, irei atualizar as dependências da aplicação para as versões mais recentes.
@@ -69,16 +69,16 @@ forma:
 
 ```html
 src/
-    business/
-        service/
-            app.service.ts
-    infrastructure/
-    ui/
-        controller/
-            app.controller.ts
-        module/
-            app.module.ts
-    main.ts
+business/
+service/
+app.service.ts
+infrastructure/
+ui/
+controller/
+app.controller.ts
+module/
+app.module.ts
+main.ts
 ```
 
 Onde:
@@ -91,12 +91,12 @@ Feito isso, irei começar pela camada de `ui` da aplicação. Essa camada será 
 
 ```html
 src/
-    ...
-    ui/
-        controller/
-        dto/
-        mapper/
-        module/
+...
+ui/
+controller/
+dto/
+mapper/
+module/
 ```
 
 Onde:
@@ -111,10 +111,10 @@ Após isso, irei implementar a camada de `business`. Essa camada será estrutura
 
 ```html
 src/
-    business/
-        mapper/
-        model/
-        service/
+business/
+mapper/
+model/
+service/
 ...
 ```
 
@@ -129,10 +129,10 @@ Por fim, irei implementar a camada de `infrastructure`. Essa camada será estrut
 
 ```html
 src/
-    ...
-    infrastructure/
-        entity/
-        repository/
+...
+infrastructure/
+entity/
+repository/
 ...
 ```
 
@@ -149,12 +149,12 @@ por `arquivo`, utilizando um arquivo de extensão `yaml`. Logo, as APIs estão e
 
 ```html
 swagger-annotation-vs-yaml/
-    annotation/
-        src/
-            ...
-    file/
-        src/
-            ...
+annotation/
+src/
+...
+file/
+src/
+...
 ```
 
 ### 3.1 Adicionando o Swagger via Annotation
@@ -418,12 +418,12 @@ import { SwaggerModule } from '@nestjs/swagger';
 import * as yaml from 'yamljs';
 
 async function bootstrap() {
-  const { PORT } = process.env;
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe()); // validate submitted data
-  const document = yaml.load('./src/ui/swagger/swagger.yaml'); // read swagger documentation from file
-  SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
-  await app.listen(PORT);
+    const { PORT } = process.env;
+    const app = await NestFactory.create(AppModule);
+    app.useGlobalPipes(new ValidationPipe()); // validate submitted data
+    const document = yaml.load('./src/ui/swagger/swagger.yaml'); // read swagger documentation from file
+    SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
+    await app.listen(PORT);
 }
 
 bootstrap();
@@ -433,18 +433,79 @@ Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, 
 
 ![header_swagger_api_doc_with_annotation](images/full_swagger_api_doc_with_file.png)
 
+### 4. O que considerar antes de escolher?
 
-###  4. Afinal, qual é o melhor alternativa?
+Do meu ponto de vista, existem alguns fatores que devem ser considerados antes de escolher uma alternativa. São eles:
 
-Do meu ponto de vista, existem alguns fatores que devem ser levados em consideração antes de escolher uma alternativa.
-São eles:
+1. Custo.
+2. Intuito da documentação.
+3. Verbosidade e Legibilidade.
+4. Manutenibilidade.
 
-1. Custo para implementação. 
-2. Verbosidade.
-3. Legibilidade.
-4. Impacto no desempenho da aplicação.
-5. Manutenibilidade.
+#### 4.1 Custo
 
-## Referências
+Considerando o custo de implementação do início, ambas as formas possuem um custo relativamente baixo, mas documentar a
+API através de um arquivo pode ser um pouco mais demorado do que usar anotações, por se tratar de um processo manual.
+Além disso, a implementação por arquivo requer um conhecimento prévio da forma de documentação do `OAS` e uma ferramenta
+externa para documentar o serviço, enquanto utilizar anotações torna o processo programático e mais natural no ambiente
+de produção.
+
+Além do custo para implementação, no contexto do NestJS existe também o fator do tamanho do build do projeto, se você
+considerar que a implementação via arquivo requer a instalação de uma biblioteca a mais se comparado com o recurso de
+anotação.
+
+#### 4.2 Intuito da documentação.
+
+Se o seu intuito é ter uma noção prévia do comportamento da API antes de começar a desenvolver, a opção mais viável é a
+documentação por arquivo. Inclusive, existem recursos como o [Swaggerhub](https://app.swaggerhub.com) que permitem criar
+um servidor "mockado" para a sua API documentada. Esse recurso é útil, por exemplo, quando algum cliente precisa
+interagir com a API antes de a mesma ter sido desenvolvida, ou estar totalmente pronta.
+
+Agora se a sua intenção é apenas entregar um produto de qualidade e documentado para um cliente final, e/ou permitir a
+interação com a API no ambiente de desenvolvimento sem precisar utilizar ferramentas de requisições HTTP, como o
+[Postman](https://www.postman.com/), aconselho fortemente utilizar a documentação por anotação.
+
+Perceba que o Swagger é um recurso bastante dedutível e simples de usar, por se tratar de uma documentação interativa.
+Em ambos os casos supracitados, é possível configurar os *hosts* para onde a requisição irá ser realizada. Seja através
+do Swaggerhub, ou através de uma instância local, é possível interagir com a mesma API *deployada* em ambientes
+distintos, o que pode ser útil quando se quer simplificar a verificação do comportamento das APIs nesses ambientes.
+
+#### 4.3 Verbosidade e Legibilidade
+
+Nesse quesito não tem muita discussão. Utilizando anotações, quanto maior o nível de detalhes da documentação, mais
+verboso o seu código vai ficar, enquanto na documentação no arquivo, a única adição de código é a biblioteca que irá ler
+o arquivo `yaml`.
+
+Em decorrência da verbosidade, a implementação dos `controllers` acaba ficando repleta de anotações, e isso pode
+dificultar um pouco a vida de programadores que não estão habituados a utilizar esse recurso. Além disso, o excesso de
+anotações acaba “poluindo” visualmente o código, além de duplicar (ou até mesmo triplicar) a quantidade de linhas de um
+`controller` simples.
+
+#### 4.4 Manutenibilidade
+
+Embora a documentação por anotações seja mais verbosa, a manutenibilidade da documentação acaba sendo mais simples do
+que manter um arquivo `yaml` atualizado. Considerando que algumas informações como `path`, `headers`
+e `mimetypes` são ajustadas dinamicamente na documentação caso sejam modificadas no código, e que há uma maior
+facilidade em adicionar as anotações das documentações em novos recursos implementados ou atualizar recursos existentes,
+é muito mais vantajoso manter a documentação programaticamente do que sempre editar um arquivo quando houver alguma
+adição, modificação ou exclusão de um recurso da API. Como consequência, utilizar o recurso de anotações permite uma
+documentação mais consistente do que utilizar um arquivo.
+
+## 5. Afinal, qual é o melhor alternativa?
+
+Os fatores que considero que mais pesam na minha decisão final são: o intuito da documentação e a manutenibilidade.
+Quando se trata de algum projeto pessoal, um projeto que é atualizado com frequência, ou um projeto que não tem como
+requisito a documentação Swagger, mas a agregação de valor é bem-vinda, geralmente opto pelo uso das anotações
+(**obviamente quando a `arquitetura` e o `framework` utilizados permitem o uso desse recurso**).
+
+Porém, quando a API não é modificada com frequência (o que é não é muito comum), quando o
+fator `quantidade de linhas de código` for relevante ou quando se quer ter uma noção da definição e do comportamento da
+API antes mesmo de construí-la, talvez utilizar arquivos possa ser mais viável.
+
+Portanto, escolher implementar a documentação da sua API via anotação ou arquivo não é uma decisão simples, como
+escolher entre azul ou vermelho. É preciso considerar estes e outros fatores que possam ser relevantes na sua decisão,
+para que a solução encontrada seja a mais adequada para a sua aplicação.
+
+## 6. Referências
 
 API - THe Open API Specification. Disponível em: https://github.com/OAI/OpenAPI-Specification.
