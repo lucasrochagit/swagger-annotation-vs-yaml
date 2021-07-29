@@ -46,14 +46,14 @@ estrutura:
 
 ```html
 src/
-app.controller.spec.ts
-app.controller.ts
-app.module.ts
-app.service.ts
-main.ts
+    app.controller.spec.ts
+    app.controller.ts
+    app.module.ts
+    app.service.ts
+    main.ts
 test/
-app.e2e-spec.ts
-jest-e2e.json
+    app.e2e-spec.ts
+    jest-e2e.json
 ```
 
 Após isso, irei atualizar as dependências da aplicação para as versões mais recentes.
@@ -69,16 +69,16 @@ forma:
 
 ```html
 src/
-business/
-service/
-app.service.ts
-infrastructure/
-ui/
-controller/
-app.controller.ts
-module/
-app.module.ts
-main.ts
+    business/
+        service/
+            app.service.ts
+    infrastructure/
+    ui/
+        controller/
+            app.controller.ts
+        module/
+            app.module.ts
+    main.ts
 ```
 
 Onde:
@@ -91,12 +91,12 @@ Feito isso, irei começar pela camada de `ui` da aplicação. Essa camada será 
 
 ```html
 src/
-...
-ui/
-controller/
-dto/
-mapper/
-module/
+    ...
+    ui/
+        controller/
+        dto/
+        mapper/
+        module/
 ```
 
 Onde:
@@ -104,24 +104,24 @@ Onde:
 - controller: Diretório que contém os `controllers` da aplicação;
 - dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`;
 - mapper: Diretório que contém os `mappers` que irão transformar os `data transfer objects`
-  em `models` da camada de `interface`,
+  em `models` (e vice-versa) da camada de `interface`,
 - module: Diretório que contém todos os `modules` da camada de `interface`,
 
 Após isso, irei implementar a camada de `business`. Essa camada será estruturada da seguinte forma:
 
 ```html
 src/
-business/
-mapper/
-model/
-service/
-...
+    business/
+        mapper/
+        model/
+        service/
+    ...
 ```
 
 Onde:
 
 - mapper: Diretório que contém os `mappers` que irão transformar os `models` da camada de `negócio`
-  em `entities`
+  em `entities` (e vice-versa) da camada de `infraestrutura`
 - model: Diretório que contém os `models` da camada de `negócio`
 - service: Diretório que contém os `services` da camada de `negócio`
 
@@ -129,10 +129,10 @@ Por fim, irei implementar a camada de `infrastructure`. Essa camada será estrut
 
 ```html
 src/
-...
-infrastructure/
-entity/
-repository/
+    ...
+    infrastructure/
+        entity/
+        repository/
 ...
 ```
 
@@ -149,12 +149,12 @@ por `arquivo`, utilizando um arquivo de extensão `yaml`. Logo, as APIs estão e
 
 ```html
 swagger-annotation-vs-yaml/
-annotation/
-src/
-...
-file/
-src/
-...
+    annotation/
+        src/
+            ...
+    file/
+        src/
+            ...
 ```
 
 ### 3.1 Adicionando o Swagger via Annotation
