@@ -393,7 +393,7 @@ export class UserController {
 }
 ```
 
-Adicione também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
+Irei adicionar também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
 do projeto não apareça na documentação final do Swagger.
 
 Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
