@@ -4,7 +4,7 @@
 
 Antes de tudo, quero reiterar que esse é um documento **opinativo**, baseado nas minhas experiências com documentação de
 APIs com Swagger utilizando bibliotecas que funcionam com anotações vs bibliotecas que leem um arquivo do tipo
-YAML/JSON. É possível que, após a escrita desse documento, o meu ponto de vista sobre essa ferramenta mude e evolua.
+`YAML`. É possível que, após a escrita desse documento, o meu ponto de vista sobre essa ferramenta mude e evolua.
 Também não me considero um mestre do uso das ferramentas aqui apresentadas, e talvez a minha pouca experiência gere
 algumas opiniões sejam equivocadas. Portanto, conto com o seu *feedback* construtivo para que eu possa continuar a
 evoluir profissionalmente com o uso dessas ferramentas.
@@ -23,7 +23,7 @@ rede.” (*OAI — The Open API Specification*). Uma documentação bem escrita 
 como interagir com o sistema, e o que esperar dele em todas as situações possíveis de interação com a aplicação.
 
 Nesse documento irei abordar duas formas de documentar uma API com o Swagger: utilizando anotações e utilizando um
-arquivo no formato YAML/JSON. Para isso, irei desenvolver uma simples API em *NodeJS* utilizando o *framework*
+arquivo no formato `YAML`. Para isso, irei desenvolver uma simples API em *NodeJS* utilizando o *framework*
 [NestJS](https://nestjs.com/) (que, a meu ver, é um dos melhores frameworks para o desenvolvimento de APIs em *NodeJS*)
 com um CRUD simples de uma entidade `Usuário`. O foco não vai ser em como construir uma API em NodeJS utilizando o
 NestJS, ou discutir sobre arquitetura de API, mas apenas mostrar as duas formas de documentar as APIs e qual é o meu
@@ -46,14 +46,14 @@ estrutura:
 
 ```html
 src/
-app.controller.spec.ts
-app.controller.ts
-app.module.ts
-app.service.ts
-main.ts
+    app.controller.spec.ts
+    app.controller.ts
+    app.module.ts
+    app.service.ts
+    main.ts
 test/
-app.e2e-spec.ts
-jest-e2e.json
+    app.e2e-spec.ts
+    jest-e2e.json
 ```
 
 Após isso, irei atualizar as dependências da aplicação para as versões mais recentes.
@@ -69,16 +69,16 @@ forma:
 
 ```html
 src/
-business/
-service/
-app.service.ts
-infrastructure/
-ui/
-controller/
-app.controller.ts
-module/
-app.module.ts
-main.ts
+    business/
+        service/
+            app.service.ts
+    infrastructure/
+    ui/
+        controller/
+            app.controller.ts
+        module/
+            app.module.ts
+    main.ts
 ```
 
 Onde:
@@ -91,12 +91,12 @@ Feito isso, irei começar pela camada de `ui` da aplicação. Essa camada será 
 
 ```html
 src/
-...
-ui/
-controller/
-dto/
-mapper/
-module/
+    ...
+    ui/
+        controller/
+        dto/
+        mapper/
+        module/
 ```
 
 Onde:
@@ -104,24 +104,24 @@ Onde:
 - controller: Diretório que contém os `controllers` da aplicação;
 - dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`;
 - mapper: Diretório que contém os `mappers` que irão transformar os `data transfer objects`
-  em `models` da camada de `interface`,
+  em `models` (e vice-versa) da camada de `interface`,
 - module: Diretório que contém todos os `modules` da camada de `interface`,
 
 Após isso, irei implementar a camada de `business`. Essa camada será estruturada da seguinte forma:
 
 ```html
 src/
-business/
-mapper/
-model/
-service/
-...
+    business/
+        mapper/
+        model/
+        service/
+    ...
 ```
 
 Onde:
 
 - mapper: Diretório que contém os `mappers` que irão transformar os `models` da camada de `negócio`
-  em `entities`
+  em `entities` (e vice-versa) da camada de `infraestrutura`
 - model: Diretório que contém os `models` da camada de `negócio`
 - service: Diretório que contém os `services` da camada de `negócio`
 
@@ -129,11 +129,11 @@ Por fim, irei implementar a camada de `infrastructure`. Essa camada será estrut
 
 ```html
 src/
-...
-infrastructure/
-entity/
-repository/
-...
+    ...
+    infrastructure/
+        entity/
+        repository/
+    ...
 ```
 
 Onde:
@@ -149,12 +149,12 @@ por `arquivo`, utilizando um arquivo de extensão `yaml`. Logo, as APIs estão e
 
 ```html
 swagger-annotation-vs-yaml/
-annotation/
-src/
-...
-file/
-src/
-...
+    annotation/
+        src/
+            ...
+    file/
+        src/
+            ...
 ```
 
 ### 3.1 Adicionando o Swagger via Annotation
@@ -167,27 +167,27 @@ e `swagger-ui-express`. Após isso, irei iniciar as configurações do Swagger. 
 import { DocumentBuilder } from '@nestjs/swagger';
 
 export class SwaggerConfig {
-    public static api(): DocumentBuilder {
-        return new DocumentBuilder()
-            .setTitle('NestJS API Swagger')
-            .setDescription(
-                'A simple NestJS API with Swagger documentation.',
-            )
-            .setVersion('v1')
-            .addServer('htp://localhost:3000', 'Local Http Instance')
-            .setTermsOfService(
-                'https://github.com/lucasrochagit/nest-base-api/blob/main/LICENSE',
-            )
-            .setContact(
-                'Lucas Cosmo Rocha',
-                'https://github.com/lucasrochagit',
-                'lucascosmorocha@gmail.com',
-            )
-            .setLicense(
-                'Apache 2.0',
-                'https://github.com/lucasrochagit/spring-base-api/blob/main/LICENSE',
-            );
-    }
+  public static api(): DocumentBuilder {
+    return new DocumentBuilder()
+      .setTitle('NestJS API Swagger')
+      .setDescription(
+        'A simple NestJS API with Swagger documentation.',
+      )
+      .setVersion('v1')
+      .addServer('htp://localhost:3000', 'Local Http Instance')
+      .setTermsOfService(
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
+      )
+      .setContact(
+        'Lucas Cosmo Rocha',
+        'https://github.com/lucasrochagit',
+        'lucascosmorocha@gmail.com',
+      )
+      .setLicense(
+        'Apache 2.0',
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
+      );
+  }
 }
 ```
 
@@ -230,7 +230,7 @@ export class AppController {
 }
 ```
 
-Ao subir a aplicação e acessar o endereço 'http://localhost:3000' resultado da documentação até então é:
+Ao subir a aplicação e acessar o endereço `http://localhost:3000` resultado da documentação até então é:
 
 ![header_swagger_api_doc_with_annotation](images/header_swagger_api_doc_with_annotation.png)
 
@@ -393,7 +393,7 @@ export class UserController {
 }
 ```
 
-Adicione também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
+Irei adicionar também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
 do projeto não apareça na documentação final do Swagger.
 
 Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
