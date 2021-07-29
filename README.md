@@ -101,11 +101,11 @@ src/
 
 Onde:
 
-- controller: Diretório que contém os `controllers` da aplicação;
-- dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`;
+- controller: Diretório que contém os `controllers` da aplicação
+- dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`
 - mapper: Diretório que contém os `mappers` que irão transformar os `data transfer objects`
-  em `models` (e vice-versa) da camada de `interface`,
-- module: Diretório que contém todos os `modules` da camada de `interface`,
+  em `models` (e vice-versa) da camada de `business`
+- module: Diretório que contém todos os `modules` da camada de `interface`
 
 Após isso, irei implementar a camada de `business`. Essa camada será estruturada da seguinte forma:
 
