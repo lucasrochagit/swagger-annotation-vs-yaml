@@ -17,7 +17,7 @@ params, etc*), quais são os dados de saída, bem como os *HTTP Status* que cada
 Swagger permite a interação com a aplicação, ou seja, é possível fazer requisições à aplicação através da documentação
 Swagger, e verificar o comportamento da mesma (como se fosse a requisição do cliente).
 
-A documentação Swagger segue a **Open API Specification (OAS)** que “que permite que humanos e computadores descubram e
+A documentação Swagger segue a **Open API Specification (OAS)** que “permite que humanos e computadores descubram e
 entendam os recursos de um serviço sem exigir acesso ao código-fonte, documentação adicional ou inspeção do tráfego de
 rede.” (*OAI — The Open API Specification*). Uma documentação bem escrita permite que o cliente compreenda com clareza
 como interagir com o sistema, e o que esperar dele em todas as situações possíveis de interação com a aplicação.
