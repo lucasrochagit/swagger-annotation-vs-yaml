@@ -1,4 +1,4 @@
-import { BaseRepository } from './base/base.reopsitory';
+import { BaseRepository } from './base/base.repository';
 import { UserEntity } from '../entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
