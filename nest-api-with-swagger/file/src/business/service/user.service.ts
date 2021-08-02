@@ -1,13 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { IService } from './interface/service.interface';
-import { UserDTO } from '../../ui/dto/user.dto';
-import { UserModel } from '../model/user.model';
-import { UserRepository } from '../../infrastructure/repository/user.repository';
-import { UserModelMapper } from '../mapper/user.model.mapper';
-import { UserEntity } from '../../infrastructure/entity/user.entity';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { UserEntity } from '../../infrastructure/entity/user.entity'
+import { UserRepository } from '../../infrastructure/repository/user.repository'
+import { UserModelMapper } from '../mapper/user.model.mapper'
+import { UserModel } from '../model/user.model'
+import { IUserService } from './interface/user.service.interface'
 
 @Injectable()
-export class UserService implements IService<UserDTO> {
+export class UserService implements IUserService {
   constructor(
     private readonly _repository: UserRepository,
     private readonly _mapper: UserModelMapper,
