@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: '.database/e-gate-db.db',
+      database: '.database/nest-api-db.db',
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -18,5 +18,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [AppController],
   providers: [],
 })
-export class AppModule {
-}
+export class AppModule {}

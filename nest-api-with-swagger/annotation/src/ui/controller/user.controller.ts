@@ -8,7 +8,6 @@ import {
   Param,
   Post,
   Put,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserDTO } from '../dto/user.dto';
 import { UserModel } from '../../business/model/user.model';
@@ -64,7 +63,7 @@ export class UserController {
   @Get('/:user_id')
   @HttpCode(HttpStatus.OK)
   @ApiProduces('application/json')
-  @ApiOkResponse({ description: 'Ok', type: UserDTO, isArray: true })
+  @ApiOkResponse({ description: 'Ok', type: UserDTO })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiForbiddenResponse({ description: 'Forbidden' })

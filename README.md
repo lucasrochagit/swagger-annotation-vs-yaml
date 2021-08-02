@@ -4,9 +4,9 @@
 
 Antes de tudo, quero reiterar que esse é um documento **opinativo**, baseado nas minhas experiências com documentação de
 APIs com Swagger utilizando bibliotecas que funcionam com anotações vs bibliotecas que leem um arquivo do tipo
-YAML/JSON. É possível que, após a escrita desse documento, o meu ponto de vista sobre essa ferramenta mude e evolua.
+`YAML`. É possível que, após a escrita desse documento, o meu ponto de vista sobre essa ferramenta mude e evolua.
 Também não me considero um mestre do uso das ferramentas aqui apresentadas, e talvez a minha pouca experiência gere
-algumas opiniões sejam equivocadas. Portanto, conto com o seu *feedback* construtivo para que eu possa continuar a
+algumas opiniões que sejam equivocadas. Portanto, conto com o seu *feedback* construtivo para que eu possa continuar a
 evoluir profissionalmente com o uso dessas ferramentas.
 
 ## 1. Introdução
@@ -17,13 +17,13 @@ params, etc*), quais são os dados de saída, bem como os *HTTP Status* que cada
 Swagger permite a interação com a aplicação, ou seja, é possível fazer requisições à aplicação através da documentação
 Swagger, e verificar o comportamento da mesma (como se fosse a requisição do cliente).
 
-A documentação Swagger segue a **Open API Specification (OAS)** que “que permite que humanos e computadores descubram e
+A documentação Swagger segue a **Open API Specification (OAS)** que “permite que humanos e computadores descubram e
 entendam os recursos de um serviço sem exigir acesso ao código-fonte, documentação adicional ou inspeção do tráfego de
 rede.” (*OAI — The Open API Specification*). Uma documentação bem escrita permite que o cliente compreenda com clareza
 como interagir com o sistema, e o que esperar dele em todas as situações possíveis de interação com a aplicação.
 
 Nesse documento irei abordar duas formas de documentar uma API com o Swagger: utilizando anotações e utilizando um
-arquivo no formato YAML/JSON. Para isso, irei desenvolver uma simples API em *NodeJS* utilizando o *framework*
+arquivo no formato `YAML`. Para isso, irei desenvolver uma simples API em *NodeJS* utilizando o *framework*
 [NestJS](https://nestjs.com/) (que, a meu ver, é um dos melhores frameworks para o desenvolvimento de APIs em *NodeJS*)
 com um CRUD simples de uma entidade `Usuário`. O foco não vai ser em como construir uma API em NodeJS utilizando o
 NestJS, ou discutir sobre arquitetura de API, mas apenas mostrar as duas formas de documentar as APIs e qual é o meu
@@ -101,11 +101,11 @@ src/
 
 Onde:
 
-- controller: Diretório que contém os `controllers` da aplicação;
-- dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`;
+- controller: Diretório que contém os `controllers` da aplicação
+- dto: Diretório que contém os `data transfer objects` (ou `dto`) da camada de `interface`
 - mapper: Diretório que contém os `mappers` que irão transformar os `data transfer objects`
-  em `models` (e vice-versa) da camada de `interface`,
-- module: Diretório que contém todos os `modules` da camada de `interface`,
+  em `models` (e vice-versa) da camada de `business`
+- module: Diretório que contém todos os `modules` da camada de `interface`
 
 Após isso, irei implementar a camada de `business`. Essa camada será estruturada da seguinte forma:
 
@@ -133,7 +133,7 @@ src/
     infrastructure/
         entity/
         repository/
-...
+    ...
 ```
 
 Onde:
@@ -141,11 +141,15 @@ Onde:
 - entity: Diretório que contém as `entities` da camada de `infraestrutura`
 - repository: Diretório que contém os `repositories` da camada de `infraestrutura`
 
+Como disse antes, o foco não é mostrar como construí a API ou quais bibliotecas utilizei para integrar a API com o banco
+de dados SQLite. Caso haja alguma dúvida e/ou sugestão, sinta-se à vontade para enviar um `pull request` ou entrar em
+contato comigo diretamente.
+
 ## 3. Adicionando o Swagger
 
-Antes de adicionar o swagger, irei replicar o projeto em duas pastas distintas. Um diretório para especificar a
-documentação Swagger da API por `annotations` e outro diretório para especificar a documentação Swagger da API
-por `arquivo`, utilizando um arquivo de extensão `yaml`. Logo, as APIs estão estruturadas da seguinte forma:
+Após construir a API, irei duplicar a mesma em dois diretórios distintos: um diretório para especificar a documentação
+Swagger da API por `annotations` e outro diretório para especificar a documentação Swagger da API por `arquivo`,
+utilizando um arquivo de extensão `yaml`. Logo, as APIs estão estruturadas da seguinte forma:
 
 ```html
 swagger-annotation-vs-yaml/
@@ -159,7 +163,7 @@ swagger-annotation-vs-yaml/
 
 ### 3.1 Adicionando o Swagger via Annotation
 
-Para adicionar o swagger via `annotation` na API, é necessário instalar as dependências `@nestjs/swagger`
+Para adicionar o swagger via `annotation` na API que está em `nest-api-with-swagger/annotation`, é necessário instalar as dependências `@nestjs/swagger`
 e `swagger-ui-express`. Após isso, irei iniciar as configurações do Swagger. Para isso, irei criar um arquivo
 `swagger.config.ts` em `src/ui/swagger`. O arquivo terá a seguinte configuração:
 
@@ -167,27 +171,27 @@ e `swagger-ui-express`. Após isso, irei iniciar as configurações do Swagger. 
 import { DocumentBuilder } from '@nestjs/swagger';
 
 export class SwaggerConfig {
-    public static api(): DocumentBuilder {
-        return new DocumentBuilder()
-            .setTitle('NestJS API Swagger')
-            .setDescription(
-                'A simple NestJS API with Swagger documentation.',
-            )
-            .setVersion('v1')
-            .addServer('htp://localhost:3000', 'Local Http Instance')
-            .setTermsOfService(
-                'https://github.com/lucasrochagit/nest-base-api/blob/main/LICENSE',
-            )
-            .setContact(
-                'Lucas Cosmo Rocha',
-                'https://github.com/lucasrochagit',
-                'lucascosmorocha@gmail.com',
-            )
-            .setLicense(
-                'Apache 2.0',
-                'https://github.com/lucasrochagit/spring-base-api/blob/main/LICENSE',
-            );
-    }
+  public static api(): DocumentBuilder {
+    return new DocumentBuilder()
+      .setTitle('NestJS API Swagger')
+      .setDescription(
+        'A simple NestJS API with Swagger documentation.',
+      )
+      .setVersion('v1')
+      .addServer('htp://localhost:3000', 'Local Http Instance')
+      .setTermsOfService(
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
+      )
+      .setContact(
+        'Lucas Cosmo Rocha',
+        'https://github.com/lucasrochagit',
+        'lucascosmorocha@gmail.com',
+      )
+      .setLicense(
+        'Apache 2.0',
+        'http://www.apache.org/licenses/LICENSE-2.0.html',
+      );
+  }
 }
 ```
 
@@ -206,7 +210,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe()); // validate submitted data
     const config = SwaggerConfig.api().build(); // get swagger config and build doc
-    const document = SwaggerModule.createDocument(app, config); // create swagger doc with swagger module
+    const document = SwaggerModule.createDocument(app, config); // create swagger doc with swagger module 
     SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
     await app.listen(3000);
 }
@@ -230,7 +234,15 @@ export class AppController {
 }
 ```
 
-Ao subir a aplicação e acessar o endereço 'http://localhost:3000' resultado da documentação até então é:
+Provavelmente você deve estar se questionando sobre o motivo de eu ter criado um endpoint que redireciona para ele
+mesmo. Realmente, dessa forma parece estar um pouco redundante, mas a justificativa é simples: sempre que a raiz da API
+for acessada no navegador, o usuário será redirecionado para a url onde está definida a documentação Swagger. Da forma
+que está descrita no arquivo `main.ts`, a documentação foi definida para ser renderizada na raiz do projeto, portanto,
+definição redundante. Porém, se porventura eu definir no arquivo `main.ts` que a documentação Swagger irá ser definida
+no path `/api-docs` ou `/swagger`, o cliente sempre será redirecionado pra documentação Swagger, a partir da raiz da
+API.
+
+Ao subir a aplicação e acessar o endereço `http://localhost:3000` o resultado da documentação é:
 
 ![header_swagger_api_doc_with_annotation](images/header_swagger_api_doc_with_annotation.png)
 
@@ -356,7 +368,7 @@ export class UserController {
     @Get('/:user_id')
     @HttpCode(HttpStatus.OK)
     @ApiProduces('application/json')
-    @ApiOkResponse({ description: 'Ok', type: UserDTO, isArray: true })
+    @ApiOkResponse({ description: 'Ok', type: UserDTO })
     @ApiNotFoundResponse({ description: 'Not Found' })
     @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @ApiForbiddenResponse({ description: 'Forbidden' })
@@ -391,6 +403,7 @@ export class UserController {
         await this._service.delete(id);
     }
 }
+
 ```
 
 Irei adicionar também a anotação `@ApiExcludeController` no `AppController`, para que a tag `default` com o endpoint da raiz
@@ -402,7 +415,7 @@ Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, 
 
 ### 3.2 Adicionando o Swagger via YAML
 
-Para adicionar o swagger via `arquivo` na API, é necessário instalar as dependências `@nestjs/swagger`
+Para adicionar o swagger via `arquivo` na API que está em `nest-api-with-swagger/file`, é necessário instalar as dependências `@nestjs/swagger`
 , `swagger-ui-express` e `yamljs`. Após isso, irei iniciar as configurações do Swagger. Para escrever a documentação
 Swagger em um arquivo .yaml, irei utilizar a ferramenta [Swagger Editor](https://editor.swagger.io/) para escrever a
 documentação (semelhante à documentação gerada com anotação) e, em seguida, irei exportar a documentação no formato
@@ -429,7 +442,7 @@ async function bootstrap() {
 bootstrap();
 ```
 
-Ao subir novamente a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
+Ao subir a aplicação e acessar o endereço `http://localhost:3000`, o resultado da documentação é:
 
 ![header_swagger_api_doc_with_annotation](images/full_swagger_api_doc_with_file.png)
 
@@ -447,12 +460,12 @@ Do meu ponto de vista, existem alguns fatores que devem ser considerados antes d
 Considerando o custo de implementação do início, ambas as formas possuem um custo relativamente baixo, mas documentar a
 API através de um arquivo pode ser um pouco mais demorado do que usar anotações, por se tratar de um processo manual.
 Além disso, a implementação por arquivo requer um conhecimento prévio da forma de documentação do `OAS` e uma ferramenta
-externa para documentar o serviço, enquanto utilizar anotações torna o processo programático e mais natural no ambiente
-de produção.
+externa para documentar o serviço, enquanto utilizar anotações torna o processo programático e mais natural durante o
+desenvolvimento da API.
 
 Além do custo para implementação, no contexto do NestJS existe também o fator do tamanho do build do projeto, se você
-considerar que a implementação via arquivo requer a instalação de uma biblioteca a mais se comparado com o recurso de
-anotação.
+considerar que a implementação via `arquivo` requer a instalação de uma biblioteca a mais se comparado com o recurso de
+`anotação`.
 
 #### 4.2 Intuito da documentação.
 
