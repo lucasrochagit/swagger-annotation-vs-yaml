@@ -145,6 +145,9 @@ Como disse antes, o foco não é mostrar como construí a API ou quais bibliotec
 de dados SQLite. Caso haja alguma dúvida e/ou sugestão, sinta-se à vontade para enviar um `pull request` ou entrar em
 contato comigo diretamente.
 
+Observação: Caso você vá executar alguma dessas aplicações, certifique-se de criar o arquivo `.env`, baseado nos arquivos
+`.env.example` existentes na raiz de cada projeto.
+
 ## 3. Adicionando o Swagger
 
 Após construir a API, irei duplicar a mesma em dois diretórios distintos: um diretório para especificar a documentação
@@ -162,6 +165,7 @@ swagger-annotation-vs-yaml/
 ```
 
 ### 3.1 Adicionando o Swagger via Annotation
+
 
 Para adicionar o swagger via `annotation` na API que está em `nest-api-with-swagger/annotation`, é necessário instalar as dependências `@nestjs/swagger`
 e `swagger-ui-express`. Após isso, irei iniciar as configurações do Swagger. Para isso, irei criar um arquivo
@@ -207,12 +211,13 @@ import { SwaggerConfig } from './ui/swagger/swagger.config';
 import { SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe()); // validate submitted data
-    const config = SwaggerConfig.api().build(); // get swagger config and build doc
-    const document = SwaggerModule.createDocument(app, config); // create swagger doc with swagger module 
-    SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
-    await app.listen(3000);
+  const { PORT, SWAGGER_PATH } = process.env;
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe()); // validate submitted data
+  const config = SwaggerConfig.api().build(); // get swagger config and build doc
+  const document = SwaggerModule.createDocument(app, config); // create swagger doc with swagger module
+  SwaggerModule.setup(SWAGGER_PATH, app, document); // setup swagger doc to run in root path
+  await app.listen(PORT);
 }
 
 bootstrap();
@@ -221,26 +226,17 @@ bootstrap();
 Em seguida, irei configurar a classe `AppController` para se comportar da seguinte forma:
 
 ```ts
-import { Controller, Get, HttpStatus, Redirect } from '@nestjs/common';
+import { Controller, Get, Redirect } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-    @Get()
-    @Redirect('/', HttpStatus.FOUND)
-    getHello() {
-        const { PORT } = process.env;
-        return { url: `http://localhost:${PORT}` };
-    }
+  @Get()
+  @Redirect()
+  getHello() {
+    return { url: process.env.SWAGGER_PATH};
+  }
 }
 ```
-
-Provavelmente você deve estar se questionando sobre o motivo de eu ter criado um endpoint que redireciona para ele
-mesmo. Realmente, dessa forma parece estar um pouco redundante, mas a justificativa é simples: sempre que a raiz da API
-for acessada no navegador, o usuário será redirecionado para a url onde está definida a documentação Swagger. Da forma
-que está descrita no arquivo `main.ts`, a documentação foi definida para ser renderizada na raiz do projeto, portanto,
-definição redundante. Porém, se porventura eu definir no arquivo `main.ts` que a documentação Swagger irá ser definida
-no path `/api-docs` ou `/swagger`, o cliente sempre será redirecionado pra documentação Swagger, a partir da raiz da
-API.
 
 Ao subir a aplicação e acessar o endereço `http://localhost:3000` o resultado da documentação é:
 
@@ -431,11 +427,11 @@ import { SwaggerModule } from '@nestjs/swagger';
 import * as yaml from 'yamljs';
 
 async function bootstrap() {
-    const { PORT } = process.env;
+    const { PORT, SWAGGER_PATH } = process.env;
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe()); // validate submitted data
     const document = yaml.load('./src/ui/swagger/swagger.yaml'); // read swagger documentation from file
-    SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
+    SwaggerModule.setup(SWAGGER_PATH, app, document); // setup swagger doc to run in root path
     await app.listen(PORT);
 }
 

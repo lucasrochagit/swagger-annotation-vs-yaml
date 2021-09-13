@@ -3,7 +3,7 @@ import { UserModel } from '../model/user.model';
 import { UserRepository } from '../../infrastructure/repository/user.repository';
 import { UserModelMapper } from '../mapper/user.model.mapper';
 import { UserEntity } from '../../infrastructure/entity/user.entity';
-import { IUserService } from './interface/user.service.interface'
+import { IUserService } from './interface/user.service.interface';
 
 @Injectable()
 export class UserService implements IUserService {

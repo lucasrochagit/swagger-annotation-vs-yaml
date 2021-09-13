@@ -1,11 +1,10 @@
-import { Controller, Get, HttpStatus, Redirect } from '@nestjs/common';
+import { Controller, Get, Redirect } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   @Get()
-  @Redirect('/', HttpStatus.FOUND)
+  @Redirect()
   getHello() {
-    const { PORT } = process.env;
-    return { url: `http://localhost:${PORT}` };
+    return { url: process.env.SWAGGER_PATH};
   }
 }

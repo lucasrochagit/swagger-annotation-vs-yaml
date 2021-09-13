@@ -5,9 +5,8 @@ import { ApiExcludeController } from '@nestjs/swagger';
 @ApiExcludeController()
 export class AppController {
   @Get()
-  @Redirect('/', HttpStatus.FOUND)
+  @Redirect()
   getHello() {
-    const { PORT } = process.env;
-    return { url: `http://localhost:${PORT}` };
+    return { url: process.env.SWAGGER_PATH };
   }
 }

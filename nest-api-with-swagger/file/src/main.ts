@@ -5,11 +5,11 @@ import { SwaggerModule } from '@nestjs/swagger';
 import * as yaml from 'yamljs';
 
 async function bootstrap() {
-  const { PORT } = process.env;
+  const { PORT, SWAGGER_PATH } = process.env;
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe()); // validate submitted data
   const document = yaml.load('./src/ui/swagger/swagger.yaml'); // read swagger documentation from file
-  SwaggerModule.setup('', app, document); // setup swagger doc to run in root path
+  SwaggerModule.setup(SWAGGER_PATH, app, document); // setup swagger doc to run in root path
   await app.listen(PORT);
 }
 
